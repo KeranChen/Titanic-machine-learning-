@@ -85,10 +85,11 @@ print train["Embarked"]
 
 
 target = train["Survived"].values 
+'''
 features_one = train[ [ "Pclass", "Age", "Sex", "Fare"]].values
 my_tree_one = tree.DecisionTreeClassifier()
 my_tree_one = my_tree_one.fit(features_one, target)
-'''
+
 
 print my_tree_one.feature_importances_
 print my_tree_one.score(features_one, target)
@@ -108,7 +109,7 @@ print(test.describe())
 print(test["Sex"].describe())
 '''
 
-
+'''
 test_features = test[["Pclass", "Sex", "Age", "Fare"]].values
 
 my_prediction = my_tree_one.predict(test_features)
@@ -120,11 +121,53 @@ my_solution = pd.DataFrame(my_prediction, PassengerId, columns = ["Survived"])
 
 print (my_solution)
 
-print (my_solution.PassengerId[1])
+'''
 '''
 
 print(my_solution.shape)
 '''
+
+'''
+9 Over fitting and how to control it
+'''
+'''
+features_two = train[["Pclass", "Age", "Sex","Fare", "SibSp", "Parch", "Embarked"]]
+max_depth = 10
+min_samples_split = 5
+my_tree_two = tree.DecisionTreeClassifier(max_depth = 10, min_samples_split = 5, random_state = 1)
+my_tree_two = my_tree_two.fit(features_two, target)
+print my_tree_two.score(features_two, target)
+'''
+
+'''
+10 Feature Engineering
+'''
+
+'''
+train_two = train.copy()
+train_two["family_size"] = train_two["Parch"] + train_two["SibSp"]+1
+features_three = train_two[["Pclass", "Sex", "Age", "Fare", "SibSp", "Parch", "family_size"]].values
+my_tree_three = tree.DecisionTreeClassifier()
+my_tree_three = my_tree_three.fit(features_three, target)
+print my_tree_three.score(features_three, target)
+'''
+'''
+11 Random Forest analysis in Python
+'''
+
+from sklearn.ensemble import RandomForestClassifier
+features_forest = train[["Pclass", "Age", "Sex", "Fare", "SibSp", "Parch", "Embarked"]].values
+forest = RandomForestClassifier(max_depth = 10, min_samples_split = 2, n_estimators = 100)
+my_forest = forest.fit(features_forest, target)
+print my_forest.score(features_forest,target)
+
+test_features = test[["Pclass", "Age", "Sex", "Fare", "SibSp", "Parch", "Embarked"]].values
+pred_forest = my_forest.predict(test_features)
+print len(pred_forest)
+
+
+
+
 
 
 
